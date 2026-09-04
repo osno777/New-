@@ -1,0 +1,42 @@
+
+{% if not articles and articles != []  %}
+    <h1>Поиск по сайту</h1>
+
+    <div class="m-3 col-md-6">
+        <form action="">
+            <div class="mb-3">
+                <label for="search" class="form-label">Введите запрос</label>
+                <input type="text" class="form-control" name="q" id="search">
+            </div>
+            <input class="btn btn-primary" type="submit" value="Отправить">
+    </div>
+
+{% else %}
+    <h1>Результаты поиска</h1>
+    <p>По запросу: {{ q }}</p>
+
+    {% if articles == [] %}
+            <p>Ничего не найдено</p>
+            <p><a href="/articles/search">Назад к поиску</a></p>
+    {%else%}
+        <ul class="row list-unstyled m-3">
+        {% for article in articles %}
+            <li class="article col-sm-6 ">
+                <div class="card m-3 h">
+                    <div class="card-body">
+                        <h2 class="card-title">{{ article.get_name() }}</h2>
+                        {% if article.get_img() %}
+                            <img src="{{article.get_img()}}" width="200px" alt="">
+                        {% endif %}
+                        <p class="m-3">{{ article.get_text() }}</p>
+                        <p>{{ article.get_author().get_nickname() }}</p>
+
+                        <p>{{ article.get_id() }}</p>
+                        <a href="article/{{article.get_id()}}">Подробнее</a>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+{% endif %}
