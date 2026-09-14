@@ -107,7 +107,12 @@ class ActiveRecordentity(metaclass=ABCMeta):
 
     @classmethod
     def search(cls, column, search_string):
-        db = Db()
-        search_string = f"'%{search_string}%'"
+        allowed_columns = {'name', 'text', 'id', 'author_id', 'create_at'}
+        if column not in allowed_columns:
+            raise ValueError(f"Недопустимая колонка: {column}")
+
         table = cls.get_table_name()
-        return db.query(f"SELECT * FROM `{table}` WHERE {column} LIKE {search_string}", {}, cls)
+        db = Db()
+        sql = f"SELECT * FROM `{table}` WHERE `{column}` LIKE ?"
+        params = (f"%{search_string}%",)
+        return db.query(sql, params, cls)
