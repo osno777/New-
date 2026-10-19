@@ -1,0 +1,355 @@
+<main class="quiz-main">
+    <div class="quiz-container">
+        <!-- шапка с информацией -->
+        <div class="quiz-header">
+            <span class="quiz-badge">📝 мини-тест</span>
+            <h1>Проверь знания</h1>
+            <p class="quiz-desc">3 вопроса · 1 минута</p>
+        </div>
+
+        <!-- карточка теста -->
+        <div class="quiz-card" id="quizCard">
+            <div class="progress-wrap">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <span id="questionIdx">1 / 3</span>
+            </div>
+
+            <div id="questionArea">
+                <!-- динамический вопрос -->
+            </div>
+
+            <button class="quiz-btn" id="nextBtn" disabled>Далее →</button>
+        </div>
+
+        <!-- результат -->
+        <div class="result-card" id="resultCard" style="display: none;">
+            <div class="result-emoji" id="resultEmoji">🎯</div>
+            <h2 id="resultTitle">Ваш результат</h2>
+            <div class="result-score" id="resultScore">0 / 3</div>
+            <button class="quiz-btn reset-btn" id="resetBtn">Пройти снова</button>
+        </div>
+    </div>
+</main>
+
+<style>
+    .quiz-main * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .quiz-main {
+        font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        background: linear-gradient(145deg, #f1f5f9 0%, #e9eef3 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem;
+    }
+
+    .quiz-container {
+        max-width: 550px;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .quiz-header {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .quiz-badge {
+        display: inline-block;
+        background: #d9e6f5;
+        color: #1e5a7d;
+        font-size: 0.7rem;
+        font-weight: 600;
+        padding: 0.2rem 0.8rem;
+        border-radius: 30px;
+        margin-bottom: 0.6rem;
+    }
+
+    .quiz-header h1 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #1a3e50;
+        margin-bottom: 0.2rem;
+    }
+
+    .quiz-desc {
+        color: #5f7f9a;
+        font-size: 0.85rem;
+    }
+
+    .quiz-card, .result-card {
+        background: white;
+        border-radius: 1.5rem;
+        padding: 1.5rem;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+        transition: all 0.2s;
+    }
+
+    .progress-wrap {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        margin-bottom: 1.8rem;
+    }
+
+    .progress-bar {
+        flex: 1;
+        height: 6px;
+        background: #e2e8f0;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        width: 0%;
+        background: #2c7cb6;
+        border-radius: 10px;
+        transition: width 0.2s;
+    }
+
+    .progress-wrap span {
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: #2c6288;
+    }
+
+    .question-text {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #1a2f3e;
+        margin-bottom: 1.3rem;
+        line-height: 1.35;
+    }
+
+    .options {
+        display: flex;
+        flex-direction: column;
+        gap: 0.7rem;
+        margin-bottom: 1.8rem;
+    }
+
+    .option {
+        background: #f8fafc;
+        border: 1.5px solid #e2edf2;
+        border-radius: 1rem;
+        padding: 0.8rem 1rem;
+        cursor: pointer;
+        transition: all 0.15s;
+        font-size: 0.95rem;
+        color: #1f4968;
+    }
+
+    .option:hover {
+        background: #f0f6fd;
+        border-color: #b9d0e4;
+    }
+
+    .option.selected {
+        background: #e8f0fe;
+        border-color: #2c7cb6;
+        color: #1a4d6f;
+        font-weight: 500;
+    }
+
+    .quiz-btn {
+        width: 100%;
+        background: #2c7cb6;
+        color: white;
+        border: none;
+        padding: 0.8rem;
+        border-radius: 2rem;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: 0.15s;
+    }
+
+    .quiz-btn:hover:not(:disabled) {
+        background: #1f6392;
+        transform: scale(0.98);
+    }
+
+    .quiz-btn:disabled {
+        background: #b9cfdf;
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+
+    .reset-btn {
+        background: #eef2f7;
+        color: #2c7cb6;
+        border: 1px solid #cbdde9;
+        margin-top: 0.5rem;
+    }
+
+    .reset-btn:hover {
+        background: #e2eaf2;
+        transform: none;
+    }
+
+    .result-card {
+        text-align: center;
+    }
+
+    .result-emoji {
+        font-size: 3rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .result-score {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #2c7cb6;
+        margin: 0.5rem 0;
+    }
+
+    .result-card h2 {
+        font-size: 1.5rem;
+        color: #1f3e54;
+    }
+</style>
+
+<script>
+    (function() {
+        // данные теста: 3 вопроса
+        const questions = [
+            {
+                text: "Какая планета самая близкая к Солнцу?",
+                options: ["Венера", "Меркурий", "Земля", "Марс"],
+                correct: 1
+            },
+            {
+                text: "Сколько бит в одном байте?",
+                options: ["4", "8", "16", "32"],
+                correct: 1
+            },
+            {
+                text: "Какой язык используется для стилей веб-страниц?",
+                options: ["HTML", "Python", "CSS", "JavaScript"],
+                correct: 2
+            }
+        ];
+
+        let currentIndex = 0;
+        let userAnswers = new Array(questions.length).fill(null);
+        let quizFinished = false;
+
+        const quizCard = document.getElementById('quizCard');
+        const resultCard = document.getElementById('resultCard');
+        const questionArea = document.getElementById('questionArea');
+        const nextBtn = document.getElementById('nextBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const progressFill = document.getElementById('progressFill');
+        const questionIdxSpan = document.getElementById('questionIdx');
+
+        function renderQuestion() {
+            if (quizFinished) return;
+            const q = questions[currentIndex];
+            const selectedIdx = userAnswers[currentIndex];
+
+            let html = `<div class="question-text">${q.text}</div>`;
+            html += `<div class="options">`;
+            q.options.forEach((opt, idx) => {
+                const isSelected = (selectedIdx === idx);
+                const selectedClass = isSelected ? 'selected' : '';
+                html += `
+                    <div class="option ${selectedClass}" data-opt-index="${idx}">
+                        ${String.fromCharCode(65+idx)}. ${opt}
+                    </div>
+                `;
+            });
+            html += `</div>`;
+            questionArea.innerHTML = html;
+
+            // вешаем обработчики на варианты
+            document.querySelectorAll('.option').forEach(optDiv => {
+                optDiv.addEventListener('click', (e) => {
+                    if (quizFinished) return;
+                    const idx = parseInt(optDiv.dataset.optIndex);
+                    // обновляем ответ
+                    userAnswers[currentIndex] = idx;
+                    // обновляем выделение
+                    document.querySelectorAll('.option').forEach(el => el.classList.remove('selected'));
+                    optDiv.classList.add('selected');
+                    // включаем кнопку далее
+                    nextBtn.disabled = false;
+                });
+            });
+
+            // обновляем прогресс
+            const progressPercent = ((currentIndex + 1) / questions.length) * 100;
+            progressFill.style.width = `${progressPercent}%`;
+            questionIdxSpan.innerText = `${currentIndex + 1} / ${questions.length}`;
+            
+            // блокируем кнопку если нет ответа
+            nextBtn.disabled = (userAnswers[currentIndex] === null);
+        }
+
+        function showResult() {
+            quizFinished = true;
+            quizCard.style.display = 'none';
+            resultCard.style.display = 'block';
+            
+            let correctCount = 0;
+            questions.forEach((q, idx) => {
+                if (userAnswers[idx] === q.correct) correctCount++;
+            });
+            
+            const scoreElem = document.getElementById('resultScore');
+            scoreElem.innerText = `${correctCount} / ${questions.length}`;
+            
+            let emoji = '';
+            let title = '';
+            if (correctCount === questions.length) {
+                emoji = '🌟🎉';
+                title = 'Отлично!';
+            } else if (correctCount >= 2) {
+                emoji = '👍✨';
+                title = 'Хороший результат!';
+            } else {
+                emoji = '📚💪';
+                title = 'Есть куда расти';
+            }
+            document.getElementById('resultEmoji').innerText = emoji;
+            document.getElementById('resultTitle').innerText = title;
+        }
+        
+        function nextQuestion() {
+            if (quizFinished) return;
+            // проверка что ответ выбран
+            if (userAnswers[currentIndex] === null) return;
+            
+            if (currentIndex + 1 < questions.length) {
+                currentIndex++;
+                renderQuestion();
+            } else {
+                // завершаем тест и показываем результат
+                showResult();
+            }
+        }
+        
+        function resetQuiz() {
+            // сброс состояния
+            currentIndex = 0;
+            userAnswers = new Array(questions.length).fill(null);
+            quizFinished = false;
+            quizCard.style.display = 'block';
+            resultCard.style.display = 'none';
+            renderQuestion();
+        }
+        
+        nextBtn.addEventListener('click', nextQuestion);
+        resetBtn.addEventListener('click', resetQuiz);
+        
+        // инициализация
+        renderQuestion();
+    })();
+</script>

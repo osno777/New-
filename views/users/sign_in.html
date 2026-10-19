@@ -1,0 +1,28 @@
+<h1>Вход</h1>
+
+{% if error %}
+    <p style="background-color: brown;">{{ error }}</p>
+{%endif%}
+
+
+
+<div class="m-3 col-md -6">
+    <form action="" method="POST">
+        <div class="mb-3">
+            <label for="inputName" class="form-label">Имя</label>
+            <input type="text" id="inputName" class="form-control" name="nickname"
+            {% if user_data %}
+                value = "{{user_data.nickname}}"
+            {% endif%}
+            >
+        </div>
+
+        <div class="mb-3">
+            <label for="inputPassword" class="form-label">Пароль</label>
+            <input type="password" id="inputPassword" class="form-control" name="password">
+        </div>
+        
+        
+        <input type="submit" class="btn btn-primary">
+    </form>
+</div>

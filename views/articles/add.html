@@ -1,0 +1,27 @@
+<h2>Создание статьи</h2>
+<br>
+<br>
+<div class="m-3 col-md-6">
+    <form action="" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="{{csrf_token}}">
+        <div class="mb-3">
+            <label> Заголовок статьи
+                <input type="text" class="form-control" name="name"
+                       value="{{article_data.get('name') if article_data else ''}}">
+            </label><br>
+            <label> Текст статьи
+                <textarea name="text">{{article_data.get('text') if article_data else ''}}</textarea>
+            </label>
+        </div>
+        <div class="mb-3">
+            <label for="inputImg" class="form-label">img
+                <input type="file" class="form-control" id="inputImg" name="img">
+            </label><br>
+        </div>
+        <input type="submit" class="btn btn-primary" value="Создать статью">
+    </form>
+</div>
+
+{% if error %}
+<div class="alert alert-danger">{{error}}</div>
+{% endif %}

@@ -1,0 +1,35 @@
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/articles" class="text-decoration-none">Статьи</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ article.get_name() }}</li>
+    </ol>
+</nav>
+
+<div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+    {% if article.get_img() %}
+        <!-- Картинка-баннер с ограничением высоты -->
+        <img src="/{{ article.get_img() }}" alt="{{ article.get_name() }}" 
+             style="width: 100%; max-height: 450px; object-fit: contain; background-color: #f8f9fa; border-bottom: 1px solid #eee;">
+    {% endif %}
+    
+    <div class="card-body p-4 p-md-5">
+        <h1 class="display-6 fw-bold mb-3">{{ article.get_name() }}</h1>
+        
+        <div class="d-flex align-items-center mb-4 text-muted border-bottom pb-3">
+            <span class="me-3">Автор: <strong class="text-dark">{{ article.get_author().get_nickname() }}</strong></span>
+            <span class="me-3">|</span>
+            <span>ID: {{ article.get_id() }}</span>
+        </div>
+
+        <div class="article-content fs-5 text-secondary" style="line-height: 1.8; word-wrap: break-word;">
+            {{ article.get_text() }}
+        </div>
+
+        <div class="mt-5 pt-4 border-top">
+            <a href="/articles" class="btn btn-secondary px-4 rounded-pill">← Назад</a>
+            {% if can_edit %}
+                <a href="/article/{{ article.get_id() }}/edit" class="btn btn-primary px-4 rounded-pill ms-2">Редактировать</a>
+            {% endif %}
+        </div>
+    </div>
+</div>

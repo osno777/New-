@@ -1,0 +1,51 @@
+<h1 class="mb-4">{{ h1 }}</h1>
+
+<div class="row g-4">
+    {% for article in articles %}
+    <!-- На больших экранах 3 колонки (col-lg-4), на средних 2 (col-md-6), на мобильных 1 (col-12) -->
+    <div class="col-12 col-md-6 col-lg-4">
+        <div class="card article-card h-100 shadow-sm border-0">
+            {% if article.get_img() %}
+            <div style="height: 200px; overflow: hidden;">
+                <img src="/{{ article.get_img() }}" alt="{{ article.get_name() }}" 
+                     style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s;">
+            </div>
+            {% else %}
+            <div style="height: 200px; background-color: #e9ecef; display: flex; align-items: center; justify-content: center;">
+                <span class="text-muted">Нет изображения</span>
+            </div>
+            {% endif %}
+            
+            <div class="card-body d-flex flex-column p-4">
+                <h3 class="card-title fw-bold mb-3" style="font-size: 1.25rem;">{{ article.get_name() }}</h3>
+                <p class="card-text text-secondary flex-grow-1" style="font-size: 0.95rem;">{{ article.get_text() }}</p>
+                
+                <div class="mt-4 pt-3 border-top d-flex justify-content-between align-items-center">
+                    <small class="text-muted">Автор: <strong>{{ article.get_author().get_nickname() }}</strong></small>
+                    <div>
+                        <a href="/article/{{ article.get_id() }}" class="btn btn-outline-secondary btn-sm">Читать</a>
+                        {% if user and article.get_author_id() == user.get_id() %}
+                            <a href="/article/{{ article.get_id() }}/edit" class="btn btn-outline-primary btn-sm ms-1">Ред.</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<style>
+    .article-card {
+        border-radius: 12px;
+        overflow: hidden;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+    .article-card:hover img {
+        transform: scale(1.05);
+    }
+</style>

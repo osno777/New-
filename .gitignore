@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+
+# База и загрузки
+sqlite.db
+uploads/
+
+# Секреты и утилиты
+cache.py
+passwords.txt
+
+# Windows / IDE
+desktop.ini
+Thumbs.db
+.vscode/
+.idea/
+
+# Черновики
+handlers.py
+active_record (1).py
