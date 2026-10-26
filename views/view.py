@@ -1,4 +1,4 @@
-import os
+import json
 from jinja2 import Environment, FileSystemLoader
 
 
@@ -6,11 +6,11 @@ class View:
     def __init__(self, layout):
         self.layout = layout
         self.extra_vars = {}
-        self.env = Environment(loader=FileSystemLoader('views'),autoescape=(["html","xml"]))
+        self.env = Environment(loader=FileSystemLoader('views'), autoescape=(["html", "xml"]))
 
-    def render_html(self,view_name,vars = {}):
+    def render_html(self, view_name, vars={}):
         latyout_file = f"layouts/{self.layout}.html"
-        file_vars = {"content" : view_name}
+        file_vars = {"content": view_name}
         file_vars.update(vars)
         file_vars.update(self.extra_vars)
         template = self.env.get_template(latyout_file)
@@ -19,4 +19,5 @@ class View:
     def set_var(self, name, value):
         self.extra_vars[name] = value
 
-
+    def display_json(self, data, code=200):
+        return json.dumps(data, ensure_ascii=False, default=str)

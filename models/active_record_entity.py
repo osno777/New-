@@ -1,6 +1,7 @@
 from servisec.db import Db
 from abc import ABCMeta, abstractmethod
 
+
 class ActiveRecordentity(metaclass=ABCMeta):
     _id = None
 
@@ -13,11 +14,11 @@ class ActiveRecordentity(metaclass=ABCMeta):
             self.update(mapped_properties)
         else:
             self.insert(mapped_properties)
-    
+
     def delete(self):
         db = Db()
         table = self.__class__.get_table_name()
-        db.query(f'DELETE FROM `{table}` WHERE id = :id',{'id' : self._id})
+        db.query(f'DELETE FROM `{table}` WHERE id = :id', {'id': self._id})
         self.id = None
         db.connection.commit()
         db.connection.close()
@@ -27,7 +28,7 @@ class ActiveRecordentity(metaclass=ABCMeta):
         db = Db()
         table_name = cls.get_table_name()
         return db.query(f"SELECT * FROM `{table_name}` ", {}, cls)
-    
+
     @classmethod
     def get_by_id(cls, id):
         db = Db()
@@ -38,19 +39,17 @@ class ActiveRecordentity(metaclass=ABCMeta):
         else:
             result = None
         return result
-    
+
     @classmethod
-    def find_one_by_column(cls,column_name,value):
+    def find_one_by_column(cls, column_name, value):
         db = Db()
         table_name = cls.get_table_name()
-        result = db.query(f"SELECT * FROM `{table_name}` WHERE  `{column_name}` = :value LIMIT 1;", {'value':value}, cls)
+        result = db.query(f"SELECT * FROM `{table_name}` WHERE  `{column_name}` = :value LIMIT 1;", {'value': value}, cls)
         if result != []:
             result = result[0]
         else:
             result = None
         return result
-
-
 
     @classmethod
     @abstractmethod
@@ -90,9 +89,9 @@ class ActiveRecordentity(metaclass=ABCMeta):
         columns = []
         paramsNames = []
         params2values = {}
-        for  columnName, value in filteredProperties.items():
+        for columnName, value in filteredProperties.items():
             columns.append('`' + columnName + '`')
-            paramsName = ':'+ columnName
+            paramsName = ':' + columnName
             paramsNames.append(paramsName)
             params2values[columnName] = value
 
@@ -116,3 +115,7 @@ class ActiveRecordentity(metaclass=ABCMeta):
         sql = f"SELECT * FROM `{table}` WHERE `{column}` LIKE ?"
         params = (f"%{search_string}%",)
         return db.query(sql, params, cls)
+
+    # +++ Метод для API
+    def to_dict(self):
+        return self.map_properties_to_db_format()
